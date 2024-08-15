@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Clicker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+            background-color: #000033;
+            color: white;
+            overflow: hidden;
+        }
+        
+        #moon {
+            font-size: 200px;
+            cursor: pointer;
+            user-select: none;
+            animation: glow 2s infinite alternate;
+            z-index: 2;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de, 0 0 75px #ff00de;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
+            }
+        }
+        
+        #dollars,
+        #energy {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        
+        #bottom-icons {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding: 10px 0;
+        }
+        
+        .icon-container {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 0 10px;
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="stars"></div>
+    <div id="dollars">$ 0</div>
+    <div id="moon">⬤</div>
+    <div id="energy">500/500</div>
+    <div id="bottom-icons">
+        <div class="icon-container">
+            <div class="icon">🏠</div>
+            <div>Home</div>
+        </div>
+        <div class="icon-container">
+            <div class="icon">👥</div>
+            <div>Friend</div>
+        </div>
+        <div class="icon-container">
+            <div class="icon">📋</div>
+            <div>Tasks</div>
+        </div>
+    </div>
+
+    <script>
+        let dollars = 0;
+        let energy = 500;
+        const moonElement = document.getElementById('moon');
+        const dollarsElement = document.getElementById('dollars');
+        const energyElement = document.getElementById('energy');
+
+        moonElement.addEventListener('click', () => {
+            if (energy > 0) {
+                dollars++;
+                energy--;
+                updateDisplay();
+            }
+        });
+
+        function updateDisplay() {
+            dollarsElement.textContent = `$ ${dollars}`;
+            energyElement.textContent = `${energy}/500`;
+        }
+
+        setInterval(() => {
+            if (energy < 500) {
+                energy++;
+                updateDisplay();
+            }
+        }, 1000);
+
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = `${Math.random() * 3}px`;
+            star.style.height = star.style.width;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            starsContainer.appendChild(star);
+        }
+
+        // Animate stars
+        function animateStars() {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                let left = parseFloat(star.style.left);
+                left += 0.05;
+                if (left > 100) left = -1;
+                star.style.left = `${left}%`;
+            });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+    </script>
+</body>
+
+</html>
